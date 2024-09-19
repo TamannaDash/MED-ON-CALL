@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Ambulance Booking System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: url('https://mobisoftinfotech.com/resources/wp-content/uploads/2019/03/ed-ems-communication-blog-mobisoft-infotech.png') center/cover;
+            margin: 0;
+            padding: 0;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            max-width: 400px;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 24px;
+            color: #333;
+        }
+
+        p {
+            font-size: 16px;
+            color: #666;
+        }
+
+        button {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #1e1e1e;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Welcome to Ambulance Booking System</h1>
+        <p>Click the button below to proceed to ambulance booking.</p>
+        <button id="nextButton">Next</button>
+    </div>
+
+    <script>
+        document.getElementById('nextButton').addEventListener('click', function () {
+            // Function to redirect to the index page with the user's location as a query parameter
+            function redirectToIndexWithLocation(latitude, longitude) {
+                window.location.href = "index.html?lat=" + latitude + "&lng=" + longitude;
+            }
+
+            // Try to get the user's current location
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    const latitude = position.coords.latitude;
+                    const longitude = position.coords.longitude;
+                    redirectToIndexWithLocation(latitude, longitude);
+                }, function (error) {
+                    // Handle errors if any
+                    console.error("Error getting user's location:", error);
+                    alert("Error getting your location. Please proceed manually.");
+                });
+            } else {
+                alert("Geolocation is not supported by this browser. Please proceed manually.");
+            }
+        });
+    </script>
+</body>
+
+</html>
