@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Ambulance Booking System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: url('https://mobisoftinfotech.com/resources/wp-content/uploads/2019/03/ed-ems-communication-blog-mobisoft-infotech.png') center/cover;
+            margin: 0;
+            padding: 0;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            max-width: 400px;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 24px;
+            color: #333;
+        }
+
+        p {
+            font-size: 16px;
+            color: #666;
+        }
+
+        button {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #1e1e1e;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Welcome to Ambulance Booking System</h1>
+        <p>Click the button below to fetch your current location and find nearby hospitals.</p>
+        <button id="nextButton">Next</button>
+    </div>
+
+    <script>
+        document.getElementById('nextButton').addEventListener('click', function () {
+            // Function to redirect to the index page with the user's location as a query parameter
+            function redirectToIndexWithLocation(latitude, longitude, accidentLocation) {
+                window.location.href = "index.html?lat=" + latitude + "&lng=" + longitude + "&accident=" + encodeURIComponent(accidentLocation);
+            }
+
+            // Initialize Google Maps API
+            function initMap() {
+                const map = new google.maps.Map(document.getElementById("map"), {
+                    center: {
+                        lat: 0,
+                        lng: 0
+                    },
+                    zoom: 15,
+                });
+
+                // Try to get the user's current location
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(function (position) {
+                        const latitude = position.coords.latitude;
+                        const longitude = position.coords.longitude;
+
+                        // Set the map center to user's current location
+                        map.setCenter({
+                            lat: latitude,
+                            lng: longitude
+                        });
+
+                        // Reverse geocode to get the address of the user's current location (accident location)
+                        const geocoder = new google.maps.Geocoder();
+                        const latlng = new google.maps.LatLng(latitude, longitude);
+
+                        geocoder.geocode({
+                            'latLng': latlng
+                        }, function (results, status) {
+                            if (status === google.maps.GeocoderStatus.OK) {
+                                if (results[0]) {
+                                    const accidentLocation = results[0].formatted_address;
+                                    alert("Accident Location: " + accidentLocation);
+
+                                    // Fetch nearby hospitals using Google Places API
+                                    const placesService = new google.maps.places.PlacesService(map);
+                                    placesService.nearbySearch({
+                                        location: {
+                                            lat: latitude,
+                                            lng: longitude
+                                        },
+                                        radius: 5000, // 5 kilometers radius
+                                        type: 'hospital'
+                                    }, function (results, status) {
+                                        if (status === google.maps.places.PlacesServiceStatus.OK) {
+                                            const hospitals = results.map(hospital => hospital.name);
+                                            alert("Nearby Hospitals: " + hospitals.join(', '));
+                                            redirectToIndexWithLocation(latitude, longitude, accidentLocation);
+                                        } else {
+                                            console.error("Error fetching nearby hospitals:", status);
+                                            alert("Error fetching nearby hospitals. Please proceed manually.");
+                                        }
+                                    });
+                                } else {
+                                    console.error("No results found for reverse geocoding.");
+                                    alert("Error fetching accident location. Please proceed manually.");
+                                }
+                            } else {
+                                console.error("Geocoder failed due to: " + status);
+                                alert("Error fetching accident location. Please proceed manually.");
+                            }
+                        });
+                    }, function (error) {
+                        // Handle errors if any
+                        console.error("Error getting user's location:", error);
+                        alert("Error getting your location. Please proceed manually.");
+                    });
+                } else {
+                    alert("Geolocation is not supported by this browser. Please proceed manually.");
+                }
+            }
+
+            // Load Google Maps API asynchronously
+            function loadScript() {
+                const script = document.createElement("script");
+                script.src = "https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&libraries=places&callback=initMap";
+                script.async = true;
+                document.head.appendChild(script);
+            }
+
+            loadScript();
+        });
+    </script>
+</body>
+
+</html>
