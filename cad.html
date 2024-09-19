@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ambulance Booking System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            font-size: 24px;
+            color: #333;
+            text-align: center;
+        }
+        label {
+            font-weight: bold;
+        }
+        select, input[type="text"], input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #3399ff;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #1e87f0;
+        }
+        #output {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Ambulance Booking System</h1>
+        <label for="accidentLocation">Accident Location:</label>
+        <select id="accidentLocation">
+            <option value="Zudio-Guduvancheri">Zudio-Guduvancheri</option>
+            <option value="Elliots Beach">Elliots Beach</option>
+            <option value="Government Museum Chennai">Government Museum Chennai</option>
+            <option value="Vandalur Zoo">Vandalur Zoo</option>
+        </select>
+        <label for="ambulanceType">Ambulance Type:</label>
+        <select id="ambulanceType">
+            <option value="Basic Ambulance">Basic Ambulance</option>
+            <option value="Advanced Life Support (ALS)">Advanced Life Support (ALS)</option>
+            <option value="Critical Care Transport (CCT)">Critical Care Transport (CCT)</option>
+        </select>
+        <label for="hospital">Select Hospital:</label>
+        <select id="hospital">
+            <option value="SRM Hospital">SRM Hospital</option>
+            <option value="Fortis Malar Hospital">Fortis Malar Hospital</option>
+            <option value="Apollo Hospital">Apollo Hospital</option>
+            <option value="One Health SP Hospital">One Health SP Hospital</option>
+        </select>
+        <button id="bookButton">Book Ambulance</button>
+        <div id="output"></div>
+    </div>
+
+    <script>
+        document.getElementById('bookButton').addEventListener('click', function() {
+            var accidentLocation = document.getElementById('accidentLocation').value;
+            var ambulanceType = document.getElementById('ambulanceType').value;
+            var name = prompt('Enter Patient Name:');
+            var age = prompt('Enter Patient Age:');
+            var bloodGroup = prompt('Enter Patient Blood Group:');
+            var phoneNumber = prompt('Enter Patient Phone Number:');
+
+            var outputDiv = document.getElementById('output');
+            outputDiv.innerHTML = '<p>Accident Location: ' + accidentLocation + '</p>' +
+                                  '<p>Ambulance Type: ' + ambulanceType + '</p>' +
+                                  '<p>Patient Name: ' + name + '</p>' +
+                                  '<p>Patient Age: ' + age + '</p>' +
+                                  '<p>Blood Group: ' + bloodGroup + '</p>' +
+                                  '<p>Patient Phone Number: ' + phoneNumber + '</p>';
+        });
+    </script>
+</body>
+</html>
